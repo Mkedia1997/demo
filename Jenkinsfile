@@ -32,7 +32,7 @@ pipeline {
         }
         stage("SonarQube analysis") {
             steps {
-              withSonarQubeEnv('Demo') {
+              withSonarQubeEnv('mayank') {
                   bat 'mvn sonar:sonar'
               }
             }
