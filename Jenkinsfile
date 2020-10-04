@@ -19,19 +19,24 @@ pipeline {
                 jacoco()
             }
         }
-         stage("SonarQube analysis") {
-            steps {
-              withSonarQubeEnv('sonar_scanner') {
-                  bat 'mvn sonar:sonar'
-              }
+        stage('build') { 
+            steps { 
+               bat 'mvn install'
             }
-          }
+        }
         stage('Package') {
             steps {
                 echo 'Packaging'
                 bat 'mvn package -DskipTests'
             }
         }
+        stage("SonarQube analysis") {
+            steps {
+              withSonarQubeEnv('SonarQube') {
+                  bat 'mvn sonar:sonar'
+              }
+            }
+          }
         stage('Deploy') {
             steps {
                 echo '## TODO DEPLOYMENT ##'
@@ -42,7 +47,6 @@ pipeline {
     post {
         always {
             echo 'JENKINS PIPELINE'
-            archiveArtifacts artifacts: 'target/code-coverage-maven-jacoco.jar', onlyIfSuccessful: true
         }
         success {
             echo 'JENKINS PIPELINE SUCCESSFUL'
