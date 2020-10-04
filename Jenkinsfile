@@ -15,13 +15,13 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing'
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
         stage('Package') {
             steps {
                 echo 'Packaging'
-                sh 'mvn package -DskipTests'
+                bat 'mvn package -DskipTests'
             }
         }
         stage('JaCoCo') {
@@ -33,7 +33,7 @@ pipeline {
          stage("SonarQube analysis") {
             steps {
               withSonarQubeEnv('SonarQube') {
-                  sh 'mvn sonar:sonar'
+                  bat 'mvn sonar:sonar'
               }
             }
           }
@@ -50,7 +50,7 @@ pipeline {
                     docker.withRegistry( '', registryCredential ) {
                         dockerImage.push()
                     }
-                    sh "docker rmi $registry:prod-v$BUILD_NUMBER"
+                    bat "docker rmi $registry:prod-v$BUILD_NUMBER"
                 }
             }
         }
@@ -64,7 +64,7 @@ pipeline {
                     docker.withRegistry( '', registryCredential ) {
                         dockerImage.push()
                     }
-                    sh "docker rmi $registry:dev-v$BUILD_NUMBER"
+                    bat "docker rmi $registry:dev-v$BUILD_NUMBER"
                 }
             }
         }
